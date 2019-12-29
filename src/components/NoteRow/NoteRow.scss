@@ -5,5 +5,12 @@
 
   &-handle {
     cursor: ns-resize;
+    vertical-align: middle;
+    position: relative;
+    top: 4px;
+  }
+
+  &-ordinal {
+    width: 100%;
   }
 }

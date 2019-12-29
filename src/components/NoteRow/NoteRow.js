@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SortableHandle as sortableHandle } from 'react-sortable-hoc';
 
@@ -16,7 +16,9 @@ export default class NoteRow extends Component {
     id: PropTypes.string.isRequired,
     notes: PropTypes.string,
     onChange: PropTypes.func.isRequired,
-    onRemove: PropTypes.func.isRequired
+    onRemove: PropTypes.func.isRequired,
+    onReorder: PropTypes.func.isRequired,
+    ordinal: PropTypes.number.isRequired
   };
 
   constructor(props) {
@@ -24,6 +26,8 @@ export default class NoteRow extends Component {
 
     this.handleFlavorChange = this.handleFlavorChange.bind(this);
     this.handleNotesChange = this.handleNotesChange.bind(this);
+    this.handleOrdinalChange = this.handleOrdinalChange.bind(this);
+    this.handleRemoveClick = this.handleRemoveClick.bind(this);
   }
 
   handleFlavorChange(event) {
@@ -44,31 +48,68 @@ export default class NoteRow extends Component {
     onChange(id, 'notes', value);
   }
 
+  handleOrdinalChange(event) {
+    const { id, onReorder } = this.props;
+    const {
+      target: { value }
+    } = event;
+
+    if (!Number.parseInt(value, 10)) {
+      return event.preventDefault();
+    }
+
+    onReorder(id, value);
+  }
+
+  handleOrdinalFocus(event) {
+    event.target.select();
+  }
+
+  handleRemoveClick() {
+    const { id, onRemove } = this.props;
+
+    onRemove(id);
+  }
+
   render() {
-    const { id, flavor, notes, onRemove } = this.props;
+    const { flavor, notes, ordinal } = this.props;
 
     return (
       <tr>
         <td>
-          <SortableHandle />
+          <Row noGutters>
+            <Col>
+              <SortableHandle />
+            </Col>
+            <Col>
+              <Form.Control
+                className="nn-note-row-ordinal"
+                onFocus={this.handleOrdinalFocus}
+                onChange={this.handleOrdinalChange}
+                plaintext
+                type="text"
+                value={ordinal}
+              />
+            </Col>
+          </Row>
         </td>
         <td className="nn-note-row-actions">
-          <Button size="sm" variant="danger" onClick={() => onRemove(id)}>
+          <Button size="sm" variant="danger" onClick={this.handleRemoveClick}>
             <FontAwesomeIcon icon="trash" />
           </Button>
         </td>
         <td>
           <Form.Control
+            onChange={this.handleFlavorChange}
             type="text"
             value={flavor}
-            onChange={this.handleFlavorChange}
           />
         </td>
         <td>
           <Form.Control
+            onChange={this.handleNotesChange}
             type="text"
             value={notes}
-            onChange={this.handleNotesChange}
           />
         </td>
       </tr>

@@ -15,19 +15,23 @@ import { actions as applicationActions } from 'reducers/application';
 import { getData } from 'selectors/application';
 
 const SortableTableRow = sortableElement(props => <NoteRow {...props} />);
-const SortableTableBody = sortableContainer(({ rows, onChange, onRemove }) => (
-  <tbody>
-    {rows.map((row, index) => (
-      <SortableTableRow
-        {...row}
-        index={index}
-        key={row.id}
-        onChange={onChange}
-        onRemove={onRemove}
-      />
-    ))}
-  </tbody>
-));
+const SortableTableBody = sortableContainer(
+  ({ rows, onChange, onRemove, onReorder }) => (
+    <tbody>
+      {rows.map((row, index) => (
+        <SortableTableRow
+          {...row}
+          index={index}
+          key={row.id}
+          onChange={onChange}
+          onRemove={onRemove}
+          onReorder={onReorder}
+          ordinal={index + 1}
+        />
+      ))}
+    </tbody>
+  )
+);
 
 export class NoteTable extends Component {
   static propTypes = {
@@ -37,8 +41,25 @@ export class NoteTable extends Component {
       rowReorder: PropTypes.func.isRequired,
       rowUpdate: PropTypes.func.isRequired
     }).isRequired,
-    data: PropTypes.arrayOf(PropTypes.object)
+    data: PropTypes.arrayOf(PropTypes.object).isRequired
   };
+
+  static defaultProps = {
+    data: []
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.handleReorder = this.handleReorder.bind(this);
+  }
+
+  handleReorder(id, newIndex) {
+    const { actions, data } = this.props;
+    const oldIndex = data.findIndex(row => row.id === id);
+
+    actions.rowReorder({ oldIndex, newIndex });
+  }
 
   render() {
     const { actions, data } = this.props;
@@ -57,6 +78,7 @@ export class NoteTable extends Component {
           hideSortableGhost={true}
           onChange={actions.rowUpdate}
           onRemove={actions.rowRemove}
+          onReorder={this.handleReorder}
           onSortEnd={actions.rowReorder}
           rows={data}
           useDragHandle={true}
