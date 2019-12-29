@@ -1,5 +1,4 @@
-import path from 'path';
-import webpack from 'webpack';
+import { resolve } from 'path';
 import { CLIEngine } from 'eslint';
 import HtmlPlugin from 'html-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
@@ -68,7 +67,7 @@ export default {
     ]
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: resolve(__dirname, 'dist'),
     filename: 'main.js',
     chunkFilename: '[name].js'
   },
@@ -87,19 +86,18 @@ export default {
     }),
     new HtmlPlugin({
       template: './src/index.html'
-    }),
-    new webpack.HotModuleReplacementPlugin()
+    })
   ],
   resolve: {
     extensions: ['.js', '.json'],
-    modules: ['node_modules', 'src']
+    modules: ['node_modules', 'src'],
+    alias: {
+      components: resolve(__dirname, 'src/components')
+    }
   },
   optimization: {
     minimizer: [
       new TerserPlugin({
-        cache: true,
-        parallel: true,
-        sourceMap: dev,
         terserOptions: {
           ecma: 9
         }
@@ -120,7 +118,7 @@ export default {
           priority: -1,
           name: 'vendor-react',
           chunks: 'all',
-          test: /[\\/]node_modules[\\/](react|redux)/
+          test: /[\\/]node_modules[\\/](react)/
         }
       }
     }
