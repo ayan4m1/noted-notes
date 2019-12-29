@@ -21,6 +21,12 @@ export default class NoteTable extends Component {
     });
   }
 
+  onChangeRow(index, field, value) {
+    const row = this.state.rows[index];
+
+    row[field] = value;
+  }
+
   render() {
     const { rows } = this.state;
 
@@ -28,6 +34,7 @@ export default class NoteTable extends Component {
       <Table className="nn-note-table">
         <thead>
           <tr>
+            <th>Action</th>
             <th>Flavor name</th>
             <th>Notes</th>
             <th>Ranking</th>
@@ -35,7 +42,7 @@ export default class NoteTable extends Component {
         </thead>
         <tbody>
           {rows.map(row => (
-            <NoteRow key={row.key} data={row} />
+            <NoteRow key={row.key} {...row} />
           ))}
           <AddRow onAdd={this.onAddRow} rowCount={rows.length} />
         </tbody>
