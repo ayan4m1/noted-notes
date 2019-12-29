@@ -1,18 +1,45 @@
+import arrayMove from 'array-move';
 import { Table } from 'react-bootstrap';
 import React, { Component } from 'react';
+import {
+  SortableContainer as sortableContainer,
+  SortableElement as sortableElement
+} from 'react-sortable-hoc';
 
 import './NoteTable.scss';
 import AddRow from 'components/AddRow/AddRow';
 import NoteRow from 'components/NoteRow/NoteRow';
+
+const SortableTableRow = sortableElement(props => <NoteRow {...props} />);
+const SortableTableBody = sortableContainer(({ rows, onChange, onRemove }) => (
+  <tbody>
+    {rows.map((row, index) => (
+      <SortableTableRow
+        {...row}
+        index={index}
+        key={row.id}
+        onChange={onChange}
+        onRemove={onRemove}
+      />
+    ))}
+  </tbody>
+));
 
 export default class NoteTable extends Component {
   constructor(props) {
     super(props);
 
     this.onAddRow = this.onAddRow.bind(this);
+    this.onChangeRow = this.onChangeRow.bind(this);
+    this.onSortEnd = this.onSortEnd.bind(this);
+    this.onRemoveRow = this.onRemoveRow.bind(this);
     this.state = {
       rows: []
     };
+  }
+
+  getRowById(id) {
+    return this.state.rows.find(row => row.id === id);
   }
 
   onAddRow(data) {
@@ -21,10 +48,31 @@ export default class NoteTable extends Component {
     });
   }
 
-  onChangeRow(index, field, value) {
-    const row = this.state.rows[index];
+  onChangeRow(id, field, value) {
+    this.setState(({ rows }) => ({
+      rows: rows.map(row => {
+        if (row.id !== id) {
+          return row;
+        }
 
-    row[field] = value;
+        return {
+          ...row,
+          [field]: value
+        };
+      })
+    }));
+  }
+
+  onSortEnd({ oldIndex, newIndex }) {
+    this.setState(({ rows }) => ({
+      rows: arrayMove(rows, oldIndex, newIndex)
+    }));
+  }
+
+  onRemoveRow(id) {
+    this.setState(({ rows }) => ({
+      rows: rows.filter(row => row.id !== id)
+    }));
   }
 
   render() {
@@ -34,18 +82,23 @@ export default class NoteTable extends Component {
       <Table className="nn-note-table">
         <thead>
           <tr>
+            <th>Order</th>
             <th>Action</th>
             <th>Flavor name</th>
             <th>Notes</th>
-            <th>Ranking</th>
           </tr>
         </thead>
-        <tbody>
-          {rows.map(row => (
-            <NoteRow key={row.key} {...row} />
-          ))}
+        <SortableTableBody
+          hideSortableGhost={true}
+          onChange={this.onChangeRow}
+          onSortEnd={this.onSortEnd}
+          onRemove={this.onRemoveRow}
+          rows={rows}
+          useDragHandle={true}
+        />
+        <tfoot>
           <AddRow onAdd={this.onAddRow} rowCount={rows.length} />
-        </tbody>
+        </tfoot>
       </Table>
     );
   }

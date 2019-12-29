@@ -1,7 +1,10 @@
+import nanoid from 'nanoid';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import './AddRow.scss';
 
 export default class AddRow extends Component {
   static propTypes = {
@@ -14,28 +17,25 @@ export default class AddRow extends Component {
 
     this.handleAddClick = this.handleAddClick.bind(this);
     this.handleFlavorChange = this.handleFlavorChange.bind(this);
-    this.handleIndexChange = this.handleIndexChange.bind(this);
     this.handleNotesChange = this.handleNotesChange.bind(this);
     this.state = {
       flavor: '',
-      index: 0,
       notes: ''
     };
   }
 
   handleAddClick() {
-    const { flavor, index, notes } = this.state;
+    const { flavor, notes } = this.state;
     const { onAdd } = this.props;
 
     onAdd({
       flavor,
-      index,
+      id: nanoid(),
       notes
     });
 
     this.setState({
       flavor: '',
-      index: 0,
       notes: ''
     });
   }
@@ -48,14 +48,6 @@ export default class AddRow extends Component {
     this.setState({ flavor });
   }
 
-  handleIndexChange(event) {
-    const {
-      target: { value: index }
-    } = event;
-
-    this.setState({ index });
-  }
-
   handleNotesChange(event) {
     const {
       target: { value: notes }
@@ -65,12 +57,13 @@ export default class AddRow extends Component {
   }
 
   render() {
-    const { flavor, index, notes } = this.state;
+    const { flavor, notes } = this.state;
 
     return (
       <tr>
-        <td>
-          <Button onClick={this.handleAddClick}>
+        <td></td>
+        <td className="nn-add-row-actions">
+          <Button variant="success" onClick={this.handleAddClick}>
             <FontAwesomeIcon icon="plus-circle" />
           </Button>
         </td>
@@ -86,13 +79,6 @@ export default class AddRow extends Component {
             type="text"
             value={notes}
             onChange={this.handleNotesChange}
-          />
-        </td>
-        <td>
-          <Form.Control
-            type="text"
-            value={index}
-            onChange={this.handleIndexChange}
           />
         </td>
       </tr>

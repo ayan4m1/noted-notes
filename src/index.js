@@ -7,21 +7,13 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
-  faAngleDoubleDown,
-  faAngleDoubleUp,
-  faAngleDown,
-  faAngleUp,
+  faGripVertical,
   faPlusCircle,
-  faTrash
+  faTrash,
+  faSave,
+  faSpinner
 } from '@fortawesome/free-solid-svg-icons';
-library.add(
-  faAngleDoubleDown,
-  faAngleDoubleUp,
-  faAngleDown,
-  faAngleUp,
-  faPlusCircle,
-  faTrash
-);
+library.add(faGripVertical, faPlusCircle, faSave, faSpinner, faTrash);
 
 import './index.scss';
 import App from './components/App/App';
