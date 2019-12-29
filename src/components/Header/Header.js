@@ -25,13 +25,13 @@ export class Header extends Component {
         <Navbar.Collapse>
           <Nav>
             <Nav.Link onClick={actions.dataLoad}>
-              <FontAwesomeIcon icon="spinner" /> Load
+              <FontAwesomeIcon icon="spinner" fixedWidth /> Load
             </Nav.Link>
             <Nav.Link onClick={actions.dataSave}>
-              <FontAwesomeIcon icon="save" /> Save
+              <FontAwesomeIcon icon="save" fixedWidth /> Save
             </Nav.Link>
             <Nav.Link onClick={actions.dataClear}>
-              <FontAwesomeIcon icon="trash" /> Clear
+              <FontAwesomeIcon icon="trash" fixedWidth /> Clear
             </Nav.Link>
           </Nav>
         </Navbar.Collapse>
