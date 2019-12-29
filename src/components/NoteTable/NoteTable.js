@@ -1,6 +1,8 @@
-import arrayMove from 'array-move';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Table } from 'react-bootstrap';
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
 import {
   SortableContainer as sortableContainer,
   SortableElement as sortableElement
@@ -9,6 +11,8 @@ import {
 import './NoteTable.scss';
 import AddRow from 'components/AddRow/AddRow';
 import NoteRow from 'components/NoteRow/NoteRow';
+import { actions as applicationActions } from 'reducers/application';
+import { getData } from 'selectors/application';
 
 const SortableTableRow = sortableElement(props => <NoteRow {...props} />);
 const SortableTableBody = sortableContainer(({ rows, onChange, onRemove }) => (
@@ -25,58 +29,19 @@ const SortableTableBody = sortableContainer(({ rows, onChange, onRemove }) => (
   </tbody>
 ));
 
-export default class NoteTable extends Component {
-  constructor(props) {
-    super(props);
-
-    this.onAddRow = this.onAddRow.bind(this);
-    this.onChangeRow = this.onChangeRow.bind(this);
-    this.onSortEnd = this.onSortEnd.bind(this);
-    this.onRemoveRow = this.onRemoveRow.bind(this);
-    this.state = {
-      rows: []
-    };
-  }
-
-  getRowById(id) {
-    return this.state.rows.find(row => row.id === id);
-  }
-
-  onAddRow(data) {
-    this.setState({
-      rows: [...this.state.rows, data]
-    });
-  }
-
-  onChangeRow(id, field, value) {
-    this.setState(({ rows }) => ({
-      rows: rows.map(row => {
-        if (row.id !== id) {
-          return row;
-        }
-
-        return {
-          ...row,
-          [field]: value
-        };
-      })
-    }));
-  }
-
-  onSortEnd({ oldIndex, newIndex }) {
-    this.setState(({ rows }) => ({
-      rows: arrayMove(rows, oldIndex, newIndex)
-    }));
-  }
-
-  onRemoveRow(id) {
-    this.setState(({ rows }) => ({
-      rows: rows.filter(row => row.id !== id)
-    }));
-  }
+export class NoteTable extends Component {
+  static propTypes = {
+    actions: PropTypes.shape({
+      rowAdd: PropTypes.func.isRequired,
+      rowRemove: PropTypes.func.isRequired,
+      rowReorder: PropTypes.func.isRequired,
+      rowUpdate: PropTypes.func.isRequired
+    }).isRequired,
+    data: PropTypes.arrayOf(PropTypes.object)
+  };
 
   render() {
-    const { rows } = this.state;
+    const { actions, data } = this.props;
 
     return (
       <Table className="nn-note-table">
@@ -90,16 +55,26 @@ export default class NoteTable extends Component {
         </thead>
         <SortableTableBody
           hideSortableGhost={true}
-          onChange={this.onChangeRow}
-          onSortEnd={this.onSortEnd}
-          onRemove={this.onRemoveRow}
-          rows={rows}
+          onChange={actions.rowUpdate}
+          onRemove={actions.rowRemove}
+          onSortEnd={actions.rowReorder}
+          rows={data}
           useDragHandle={true}
         />
         <tfoot>
-          <AddRow onAdd={this.onAddRow} rowCount={rows.length} />
+          <AddRow onAdd={actions.rowAdd} />
         </tfoot>
       </Table>
     );
   }
 }
+
+export const mapStateToProps = state => ({
+  data: getData(state)
+});
+
+export const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(applicationActions, dispatch)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(NoteTable);

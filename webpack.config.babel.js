@@ -101,7 +101,11 @@ export default {
     extensions: ['.js', '.json'],
     modules: ['node_modules', 'src'],
     alias: {
-      components: resolve(__dirname, 'src/components')
+      components: resolve(__dirname, 'src/components'),
+      reducers: resolve(__dirname, 'src/reducers'),
+      sagas: resolve(__dirname, 'src/sagas'),
+      selectors: resolve(__dirname, 'src/selectors'),
+      utils: resolve(__dirname, 'src/utils')
     }
   },
   optimization: {

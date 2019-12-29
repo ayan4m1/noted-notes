@@ -56,7 +56,7 @@ module.exports = {
     'max-statements': 0,
     'new-cap': [2, { properties: false }],
     'newline-after-var': 1,
-    'no-alert': 2,
+    'no-alert': 0,
     'no-array-constructor': 2,
     'no-bitwise': 2,
     'no-caller': 2,

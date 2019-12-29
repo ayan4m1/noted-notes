@@ -8,7 +8,6 @@ import './AddRow.scss';
 
 export default class AddRow extends Component {
   static propTypes = {
-    rowCount: PropTypes.number.isRequired,
     onAdd: PropTypes.func.isRequired
   };
 

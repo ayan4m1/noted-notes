@@ -1,17 +1,38 @@
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import React, { Component, Fragment } from 'react';
 
-import DataManager from 'components/DataManager/DataManager';
+import Header from 'components/Header/Header';
 import NoteTable from 'components/NoteTable/NoteTable';
 
+import { actions as applicationActions } from 'reducers/application';
+
 export class App extends Component {
+  static propTypes = {
+    actions: PropTypes.shape({
+      appInit: PropTypes.func.isRequired
+    }).isRequired
+  };
+
+  componentDidMount() {
+    const { actions } = this.props;
+
+    actions.appInit();
+  }
+
   render() {
     return (
       <Fragment>
-        <DataManager />
+        <Header />
         <NoteTable />
       </Fragment>
     );
   }
 }
 
-export default App;
+export const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(applicationActions, dispatch)
+});
+
+export default connect(null, mapDispatchToProps)(App);
