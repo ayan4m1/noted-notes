@@ -22,16 +22,14 @@ const plugins = [
   }),
   new MiniCSSExtractPlugin({
     filename: '[name].css'
+  }),
+  new HtmlPlugin({
+    template: './src/index.html'
   })
 ];
 
 if (dev) {
-  plugins.push(
-    new HtmlPlugin({
-      template: './src/index.html'
-    }),
-    new webpack.HotModuleReplacementPlugin()
-  );
+  plugins.push(new webpack.HotModuleReplacementPlugin());
 }
 
 export default {
