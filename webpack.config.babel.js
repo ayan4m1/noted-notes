@@ -1,3 +1,4 @@
+import webpack from 'webpack';
 import { resolve } from 'path';
 import { CLIEngine } from 'eslint';
 import HtmlPlugin from 'html-webpack-plugin';
@@ -8,6 +9,30 @@ import { CleanWebpackPlugin as CleanPlugin } from 'clean-webpack-plugin';
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 
 const dev = process.env.NODE_ENV === 'development';
+
+const plugins = [
+  new CleanPlugin(),
+  new StylelintPlugin({
+    configFile: '.stylelintrc',
+    context: 'src',
+    files: '**/*.scss',
+    failOnError: true,
+    quiet: false,
+    syntax: 'scss'
+  }),
+  new MiniCSSExtractPlugin({
+    filename: '[name].css'
+  })
+];
+
+if (dev) {
+  plugins.push(
+    new HtmlPlugin({
+      template: './src/index.html'
+    }),
+    new webpack.HotModuleReplacementPlugin()
+  );
+}
 
 export default {
   mode: dev ? 'development' : 'production',
@@ -71,23 +96,7 @@ export default {
     filename: 'main.js',
     chunkFilename: '[name].js'
   },
-  plugins: [
-    new CleanPlugin(),
-    new StylelintPlugin({
-      configFile: '.stylelintrc',
-      context: 'src',
-      files: '**/*.scss',
-      failOnError: true,
-      quiet: false,
-      syntax: 'scss'
-    }),
-    new MiniCSSExtractPlugin({
-      filename: '[name].css'
-    }),
-    new HtmlPlugin({
-      template: './src/index.html'
-    })
-  ],
+  plugins,
   resolve: {
     extensions: ['.js', '.json'],
     modules: ['node_modules', 'src'],
