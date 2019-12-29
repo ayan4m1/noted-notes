@@ -5,10 +5,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-// todo: uncomment the lines below, substituting in the icons you need
-// import { library } from '@fortawesome/fontawesome-svg-core';
-// import { faFontAwesome } from '@fortawesome/free-solid-svg-icons';
-// library.add(faFontAwesome);
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faAngleDoubleDown,
+  faAngleDoubleUp,
+  faAngleDown,
+  faAngleUp,
+  faPlusCircle,
+  faTrash
+} from '@fortawesome/free-solid-svg-icons';
+library.add(
+  faAngleDoubleDown,
+  faAngleDoubleUp,
+  faAngleDown,
+  faAngleUp,
+  faPlusCircle,
+  faTrash
+);
 
 import './index.scss';
 import App from './components/App/App';
