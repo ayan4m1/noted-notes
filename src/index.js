@@ -8,16 +8,7 @@ import createSagaMiddleware from 'redux-saga';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { applyMiddleware, createStore, compose } from 'redux';
 
-import { library } from '@fortawesome/fontawesome-svg-core';
-import {
-  faGripVertical,
-  faPlusCircle,
-  faTrash,
-  faSave,
-  faSpinner
-} from '@fortawesome/free-solid-svg-icons';
-library.add(faGripVertical, faPlusCircle, faSave, faSpinner, faTrash);
-
+import './icons';
 import './index.scss';
 import App from './components/App/App';
 import rootSaga from './sagas';
