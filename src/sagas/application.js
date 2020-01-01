@@ -1,3 +1,4 @@
+import fileDownload from 'js-file-download';
 import { all, put, select, takeLatest } from 'redux-saga/effects';
 
 import { actions, types } from 'reducers/application';
@@ -12,6 +13,12 @@ const getStoredData = () => {
 
   return data;
 };
+
+function* exportDataWorker() {
+  const currentData = yield select(getData);
+
+  fileDownload(JSON.stringify(currentData), 'export.json');
+}
 
 function* loadDataWorker() {
   const data = getStoredData();
@@ -50,9 +57,14 @@ function* saveDataWorker() {
 }
 
 export const workers = {
+  exportDataWorker,
   loadDataWorker,
   saveDataWorker
 };
+
+function* exportDataWatcher() {
+  yield takeLatest(types.DATA_EXPORT, exportDataWorker);
+}
 
 function* loadDataWatcher() {
   yield takeLatest(types.DATA_LOAD, loadDataWorker);
@@ -63,6 +75,7 @@ function* saveDataWatcher() {
 }
 
 export const watchers = {
+  exportDataWatcher,
   loadDataWatcher,
   saveDataWatcher
 };

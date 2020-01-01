@@ -4,6 +4,8 @@ import arrayMove from 'array-move';
 export const types = buildActions('application', [
   'APP_INIT',
   'DATA_CLEAR',
+  'DATA_EXPORT',
+  'DATA_IMPORT',
   'DATA_LOAD',
   'DATA_SAVE',
   'ROW_ADD',
@@ -18,6 +20,15 @@ const appInit = () => ({
 
 const dataClear = () => ({
   type: types.DATA_CLEAR
+});
+
+const dataExport = () => ({
+  type: types.DATA_EXPORT
+});
+
+const dataImport = data => ({
+  type: types.DATA_IMPORT,
+  data
 });
 
 const dataLoad = () => ({
@@ -54,6 +65,8 @@ const rowUpdate = (id, field, value) => ({
 export const actions = {
   appInit,
   dataClear,
+  dataExport,
+  dataImport,
   dataLoad,
   dataSave,
   rowAdd,
@@ -72,6 +85,11 @@ export const reducer = (state = initialState, action = {}) => {
       return {
         ...state,
         data: []
+      };
+    case types.DATA_IMPORT:
+      return {
+        ...state,
+        data: action.data
       };
     case types.ROW_ADD:
       return {

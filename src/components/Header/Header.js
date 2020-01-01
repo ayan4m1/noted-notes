@@ -5,12 +5,15 @@ import { bindActionCreators } from 'redux';
 import { Nav, Navbar } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import ImportNavLink from 'components/ImportNavLink/ImportNavLink';
 import { actions as applicationActions } from 'reducers/application';
 
 export class Header extends Component {
   static propTypes = {
     actions: PropTypes.shape({
       dataClear: PropTypes.func.isRequired,
+      dataExport: PropTypes.func.isRequired,
+      dataImport: PropTypes.func.isRequired,
       dataLoad: PropTypes.func.isRequired,
       dataSave: PropTypes.func.isRequired
     }).isRequired
@@ -29,6 +32,10 @@ export class Header extends Component {
             </Nav.Link>
             <Nav.Link onClick={actions.dataSave}>
               <FontAwesomeIcon icon="save" fixedWidth /> Save
+            </Nav.Link>
+            <ImportNavLink dataImport={actions.dataImport} />
+            <Nav.Link onClick={actions.dataExport}>
+              <FontAwesomeIcon icon="file-download" fixedWidth /> Export
             </Nav.Link>
             <Nav.Link onClick={actions.dataClear}>
               <FontAwesomeIcon icon="trash" fixedWidth /> Clear
