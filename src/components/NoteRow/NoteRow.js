@@ -75,6 +75,10 @@ export default class NoteRow extends Component {
   }
 
   handleSearchClick(flavor) {
+    if (!flavor) {
+      return;
+    }
+
     for (const baseUrl of vendorUrls) {
       window.open(`${baseUrl}${encodeURIComponent(flavor)}`);
     }
