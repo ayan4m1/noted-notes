@@ -10,6 +10,15 @@ const SortableHandle = sortableHandle(() => (
   <FontAwesomeIcon icon="grip-vertical" className="nn-note-row-handle" />
 ));
 
+const vendorUrls = [
+  'https://riversupplyco.com/pages/search-results-page?q=',
+  'https://www.bullcityflavors.com/search.php?section=product&search_query=',
+  'https://flavorjungle.com/pages/search-results-page?q=',
+  'https://wizardlabs.us/index.php?route=product/search&search=',
+  'https://www.diyvaporsupply.com/search.php?section=product&search_query=',
+  'https://www.vaperstek.org/search.php?section=content&search_query='
+];
+
 export default class NoteRow extends Component {
   static propTypes = {
     flavor: PropTypes.string,
@@ -65,6 +74,12 @@ export default class NoteRow extends Component {
     event.target.select();
   }
 
+  handleSearchClick(flavor) {
+    for (const baseUrl of vendorUrls) {
+      window.open(`${baseUrl}${encodeURIComponent(flavor)}`);
+    }
+  }
+
   handleRemoveClick() {
     const { id, onRemove } = this.props;
 
@@ -94,8 +109,19 @@ export default class NoteRow extends Component {
           </Row>
         </td>
         <td className="nn-note-row-actions">
-          <Button size="sm" variant="danger" onClick={this.handleRemoveClick}>
-            <FontAwesomeIcon icon="trash" />
+          <Button
+            variant="danger"
+            onClick={this.handleRemoveClick}
+            title="Remove"
+          >
+            <FontAwesomeIcon icon="trash" size="xs" />
+          </Button>{' '}
+          <Button
+            variant="primary"
+            onClick={() => this.handleSearchClick(flavor)}
+            title="Search"
+          >
+            <FontAwesomeIcon icon="search" size="xs" />
           </Button>
         </td>
         <td>
