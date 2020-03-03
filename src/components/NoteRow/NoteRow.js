@@ -103,8 +103,8 @@ export default class NoteRow extends Component {
             <Col>
               <Form.Control
                 className="nn-note-row-ordinal"
-                onFocus={this.handleOrdinalFocus}
                 onChange={this.handleOrdinalChange}
+                onFocus={this.handleOrdinalFocus}
                 plaintext
                 type="text"
                 value={ordinal}
@@ -114,16 +114,16 @@ export default class NoteRow extends Component {
         </td>
         <td className="nn-note-row-actions">
           <Button
-            variant="danger"
             onClick={this.handleRemoveClick}
             title="Remove"
+            variant="danger"
           >
             <FontAwesomeIcon icon="trash" size="xs" />
           </Button>{' '}
           <Button
-            variant="primary"
             onClick={() => this.handleSearchClick(flavor)}
             title="Search"
+            variant="primary"
           >
             <FontAwesomeIcon icon="search" size="xs" />
           </Button>
