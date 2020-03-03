@@ -137,8 +137,9 @@ export default class NoteRow extends Component {
         </td>
         <td>
           <Form.Control
+            as="textarea"
             onChange={this.handleNotesChange}
-            type="text"
+            rows={1}
             value={notes}
           />
         </td>

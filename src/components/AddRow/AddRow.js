@@ -75,9 +75,10 @@ export default class AddRow extends Component {
         </td>
         <td>
           <Form.Control
-            type="text"
+            as="textarea"
             value={notes}
             onChange={this.handleNotesChange}
+            rows={1}
           />
         </td>
       </tr>
