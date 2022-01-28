@@ -11,12 +11,11 @@ const SortableHandle = sortableHandle(() => (
 ));
 
 const vendorUrls = [
-  'https://riversupplyco.com/pages/search-results-page?q=',
   'https://www.bullcityflavors.com/search.php?section=product&search_query=',
   'https://flavorjungle.com/pages/search-results-page?q=',
-  'https://wizardlabs.us/index.php?route=product/search&search=',
   'https://www.diyvaporsupply.com/search.php?section=product&search_query=',
-  'https://www.vaperstek.org/search.php?section=content&search_query='
+  'https://www.chefsflavours.co.uk/search?type=product,page,collection&q=',
+  'https://nomnomz.co.uk/?product_cat=&post_type=product&s='
 ];
 
 export default class NoteRow extends Component {
@@ -96,7 +95,7 @@ export default class NoteRow extends Component {
     return (
       <tr>
         <td>
-          <Row noGutters>
+          <Row className="g-0">
             <Col>
               <SortableHandle />
             </Col>
