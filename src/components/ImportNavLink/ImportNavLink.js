@@ -1,62 +1,55 @@
 import PropTypes from 'prop-types';
 import { Nav } from 'react-bootstrap';
-import { createRef, Component, Fragment } from 'react';
+import { Fragment, useRef, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default class ImportNavLink extends Component {
-  static propTypes = {
-    dataImport: PropTypes.func.isRequired
-  };
+export default function ImportNavLink({ dataImport }) {
+  const importRef = useRef();
 
-  constructor(props) {
-    super(props);
-
-    this.importRef = createRef();
-    this.handleImportClick = this.handleImportClick.bind(this);
-    this.handleImportChange = this.handleImportChange.bind(this);
-  }
-
-  handleImportClick() {
-    if (this.importRef.current) {
-      this.importRef.current.click();
+  const handleImportClick = useCallback(() => {
+    if (importRef.current) {
+      importRef.current.click();
     }
-  }
-
-  handleImportChange(event) {
-    const { dataImport } = this.props;
-    const {
-      target: {
-        files: [file]
-      }
-    } = event;
-    const reader = new FileReader();
-
-    reader.onloadend = (loaded) => {
+  }, [importRef]);
+  const handleImportChange = useCallback(
+    (event) => {
       const {
-        target: { result }
-      } = loaded;
-      const parsed = JSON.parse(result);
+        target: {
+          files: [file]
+        }
+      } = event;
+      const reader = new FileReader();
 
-      if (parsed) {
-        dataImport(parsed);
-      }
-    };
-    reader.readAsText(file);
-  }
+      reader.onloadend = (loaded) => {
+        const {
+          target: { result }
+        } = loaded;
+        const parsed = JSON.parse(result);
 
-  render() {
-    return (
-      <Fragment>
-        <input
-          type="file"
-          ref={this.importRef}
-          onChange={this.handleImportChange}
-          className="d-none"
-        />
-        <Nav.Link onClick={this.handleImportClick}>
-          <FontAwesomeIcon icon="file-download" fixedWidth /> Import...
-        </Nav.Link>
-      </Fragment>
-    );
-  }
+        if (parsed) {
+          dataImport(parsed);
+        }
+      };
+      reader.readAsText(file);
+    },
+    [dataImport]
+  );
+
+  return (
+    <Fragment>
+      <input
+        type="file"
+        ref={importRef}
+        onChange={handleImportChange}
+        className="d-none"
+      />
+      <Nav.Link onClick={handleImportClick}>
+        <FontAwesomeIcon icon="file-download" fixedWidth /> Import...
+      </Nav.Link>
+    </Fragment>
+  );
 }
+
+ImportNavLink.propTypes = {
+  dataImport: PropTypes.func.isRequired
+};

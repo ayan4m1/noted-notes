@@ -1,10 +1,13 @@
 import PropTypes from 'prop-types';
-import { Component } from 'react';
+import { useCallback } from 'react';
+import { useDispatch } from 'react-redux';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SortableHandle as sortableHandle } from 'react-sortable-hoc';
 
 import './NoteRow.scss';
+
+import { actions as applicationActions } from 'reducers/application';
 
 const SortableHandle = sortableHandle(() => (
   <FontAwesomeIcon icon="grip-vertical" className="nn-note-row-handle" />
@@ -18,62 +21,40 @@ const vendorUrls = [
   'https://nomnomz.co.uk/?product_cat=&post_type=product&s='
 ];
 
-export default class NoteRow extends Component {
-  static propTypes = {
-    flavor: PropTypes.string,
-    id: PropTypes.string.isRequired,
-    notes: PropTypes.string,
-    onChange: PropTypes.func.isRequired,
-    onRemove: PropTypes.func.isRequired,
-    onReorder: PropTypes.func.isRequired,
-    ordinal: PropTypes.number.isRequired
-  };
+export default function NoteRow({ flavor, id, notes, ordinal }) {
+  const dispatch = useDispatch();
 
-  constructor(props) {
-    super(props);
+  const handleFlavorChange = useCallback(
+    ({ target: { value } }) =>
+      dispatch(applicationActions.rowUpdate(id, 'flavor', value)),
+    [dispatch, id]
+  );
+  const handleNotesChange = useCallback(
+    ({ target: { value } }) =>
+      dispatch(applicationActions.rowUpdate(id, 'notes', value)),
+    [dispatch, id]
+  );
+  const handleOrdinalChange = useCallback(
+    (event) => {
+      const {
+        target: { value }
+      } = event;
 
-    this.handleFlavorChange = this.handleFlavorChange.bind(this);
-    this.handleNotesChange = this.handleNotesChange.bind(this);
-    this.handleOrdinalChange = this.handleOrdinalChange.bind(this);
-    this.handleRemoveClick = this.handleRemoveClick.bind(this);
-  }
+      if (!parseInt(value, 10)) {
+        return event.preventDefault();
+      }
 
-  handleFlavorChange(event) {
-    const { id, onChange } = this.props;
-    const {
-      target: { value }
-    } = event;
-
-    onChange(id, 'flavor', value);
-  }
-
-  handleNotesChange(event) {
-    const { id, onChange } = this.props;
-    const {
-      target: { value }
-    } = event;
-
-    onChange(id, 'notes', value);
-  }
-
-  handleOrdinalChange(event) {
-    const { id, onReorder } = this.props;
-    const {
-      target: { value }
-    } = event;
-
-    if (!Number.parseInt(value, 10)) {
-      return event.preventDefault();
-    }
-
-    onReorder(id, value);
-  }
-
-  handleOrdinalFocus(event) {
-    event.target.select();
-  }
-
-  handleSearchClick(flavor) {
+      dispatch(
+        applicationActions.rowReorder({
+          oldIndex: ordinal - 1,
+          newIndex: parseInt(value, 10) - 1
+        })
+      );
+    },
+    [dispatch, ordinal]
+  );
+  const handleOrdinalFocus = useCallback((event) => event.target.select(), []);
+  const handleSearchClick = useCallback(() => {
     if (!flavor) {
       return;
     }
@@ -81,68 +62,65 @@ export default class NoteRow extends Component {
     for (const baseUrl of vendorUrls) {
       window.open(`${baseUrl}${encodeURIComponent(flavor)}`);
     }
-  }
+  }, [flavor]);
+  const handleRemoveClick = useCallback(
+    () => dispatch(applicationActions.rowRemove(id)),
+    [dispatch, id]
+  );
 
-  handleRemoveClick() {
-    const { id, onRemove } = this.props;
-
-    onRemove(id);
-  }
-
-  render() {
-    const { flavor, notes, ordinal } = this.props;
-
-    return (
-      <tr>
-        <td>
-          <Row className="g-0">
-            <Col>
-              <SortableHandle />
-            </Col>
-            <Col>
-              <Form.Control
-                className="nn-note-row-ordinal"
-                onChange={this.handleOrdinalChange}
-                onFocus={this.handleOrdinalFocus}
-                plaintext
-                type="text"
-                value={ordinal}
-              />
-            </Col>
-          </Row>
-        </td>
-        <td className="text-center">
-          <Button
-            onClick={this.handleRemoveClick}
-            title="Remove"
-            variant="danger"
-          >
-            <FontAwesomeIcon icon="trash" size="xs" />
-          </Button>{' '}
-          <Button
-            onClick={() => this.handleSearchClick(flavor)}
-            title="Search"
-            variant="primary"
-          >
-            <FontAwesomeIcon icon="search" size="xs" />
-          </Button>
-        </td>
-        <td>
-          <Form.Control
-            onChange={this.handleFlavorChange}
-            type="text"
-            value={flavor}
-          />
-        </td>
-        <td>
-          <Form.Control
-            as="textarea"
-            onChange={this.handleNotesChange}
-            rows={1}
-            value={notes}
-          />
-        </td>
-      </tr>
-    );
-  }
+  return (
+    <tr>
+      <td>
+        <Row className="g-0">
+          <Col>
+            <SortableHandle />
+          </Col>
+          <Col>
+            <Form.Control
+              className="nn-note-row-ordinal"
+              onChange={handleOrdinalChange}
+              onFocus={handleOrdinalFocus}
+              plaintext
+              type="text"
+              value={ordinal}
+            />
+          </Col>
+        </Row>
+      </td>
+      <td className="text-center">
+        <Button onClick={handleRemoveClick} title="Remove" variant="danger">
+          <FontAwesomeIcon icon="trash" size="xs" />
+        </Button>{' '}
+        <Button
+          onClick={() => handleSearchClick(flavor)}
+          title="Search"
+          variant="primary"
+        >
+          <FontAwesomeIcon icon="search" size="xs" />
+        </Button>
+      </td>
+      <td>
+        <Form.Control
+          onChange={handleFlavorChange}
+          type="text"
+          value={flavor}
+        />
+      </td>
+      <td>
+        <Form.Control
+          as="textarea"
+          onChange={handleNotesChange}
+          rows={1}
+          value={notes}
+        />
+      </td>
+    </tr>
+  );
 }
+
+NoteRow.propTypes = {
+  flavor: PropTypes.string,
+  id: PropTypes.string.isRequired,
+  notes: PropTypes.string,
+  ordinal: PropTypes.number.isRequired
+};

@@ -1,24 +1,29 @@
 // eslint-disable-next-line import/no-unresolved
 import { nanoid } from 'nanoid';
-import PropTypes from 'prop-types';
 import { useCallback, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useDispatch } from 'react-redux';
 
-export default function AddRow({ onAdd }) {
+import { actions as applicationActions } from 'reducers/application';
+
+export default function AddRow() {
+  const dispatch = useDispatch();
   const [flavor, setFlavor] = useState('');
   const [notes, setNotes] = useState('');
 
   const handleAddClick = useCallback(() => {
-    onAdd({
-      flavor,
-      id: nanoid(),
-      notes
-    });
+    dispatch(
+      applicationActions.rowAdd({
+        flavor,
+        id: nanoid(),
+        notes
+      })
+    );
 
     setFlavor('');
     setNotes('');
-  }, [onAdd, setFlavor, setNotes]);
+  }, [dispatch, flavor, notes, setFlavor, setNotes]);
   const handleFlavorChange = useCallback(
     ({ target: { value } }) => setFlavor(value),
     [setFlavor]
@@ -54,7 +59,3 @@ export default function AddRow({ onAdd }) {
     </tr>
   );
 }
-
-AddRow.propTypes = {
-  onAdd: PropTypes.func.isRequired
-};
