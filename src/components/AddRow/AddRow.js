@@ -5,8 +5,6 @@ import { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import './AddRow.scss';
-
 export default class AddRow extends Component {
   static propTypes = {
     onAdd: PropTypes.func.isRequired
@@ -62,7 +60,7 @@ export default class AddRow extends Component {
     return (
       <tr>
         <td></td>
-        <td className="nn-add-row-actions">
+        <td className="text-center">
           <Button variant="success" onClick={this.handleAddClick}>
             <FontAwesomeIcon icon="plus-circle" />
           </Button>

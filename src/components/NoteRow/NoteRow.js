@@ -112,7 +112,7 @@ export default class NoteRow extends Component {
             </Col>
           </Row>
         </td>
-        <td className="nn-note-row-actions">
+        <td className="text-center">
           <Button
             onClick={this.handleRemoveClick}
             title="Remove"
