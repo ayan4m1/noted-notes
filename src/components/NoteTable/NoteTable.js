@@ -14,7 +14,7 @@ import NoteRow from 'components/NoteRow/NoteRow';
 import { actions as applicationActions } from 'reducers/application';
 import { getData } from 'selectors/application';
 
-const SortableTableRow = sortableElement(props => <NoteRow {...props} />);
+const SortableTableRow = sortableElement((props) => <NoteRow {...props} />);
 const SortableTableBody = sortableContainer(
   ({ rows, onChange, onRemove, onReorder }) => (
     <tbody>
@@ -56,7 +56,7 @@ export class NoteTable extends Component {
 
   handleReorder(id, newIndex) {
     const { actions, data } = this.props;
-    const oldIndex = data.findIndex(row => row.id === id);
+    const oldIndex = data.findIndex((row) => row.id === id);
 
     actions.rowReorder({ oldIndex, newIndex });
   }
@@ -91,11 +91,11 @@ export class NoteTable extends Component {
   }
 }
 
-export const mapStateToProps = state => ({
+export const mapStateToProps = (state) => ({
   data: getData(state)
 });
 
-export const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(applicationActions, dispatch)
 });
 

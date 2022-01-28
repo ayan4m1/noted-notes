@@ -26,7 +26,7 @@ const dataExport = () => ({
   type: types.DATA_EXPORT
 });
 
-const dataImport = data => ({
+const dataImport = (data) => ({
   type: types.DATA_IMPORT,
   data
 });
@@ -39,12 +39,12 @@ const dataSave = () => ({
   type: types.DATA_SAVE
 });
 
-const rowAdd = row => ({
+const rowAdd = (row) => ({
   type: types.ROW_ADD,
   row
 });
 
-const rowRemove = id => ({
+const rowRemove = (id) => ({
   type: types.ROW_REMOVE,
   id
 });
@@ -99,7 +99,7 @@ export const reducer = (state = initialState, action = {}) => {
     case types.ROW_REMOVE:
       return {
         ...state,
-        data: state.data.filter(row => row.id !== action.id)
+        data: state.data.filter((row) => row.id !== action.id)
       };
     case types.ROW_REORDER:
       return {
@@ -109,7 +109,7 @@ export const reducer = (state = initialState, action = {}) => {
     case types.ROW_UPDATE:
       return {
         ...state,
-        data: state.data.map(row => {
+        data: state.data.map((row) => {
           if (row.id !== action.id) {
             return row;
           }

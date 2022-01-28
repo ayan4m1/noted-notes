@@ -10,6 +10,7 @@ import { applyMiddleware, createStore, compose } from 'redux';
 
 import './icons';
 import './index.scss';
+// eslint-disable-next-line
 import App from './components/App/App';
 import rootSaga from './sagas';
 import rootReducer from './reducers';

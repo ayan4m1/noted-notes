@@ -31,7 +31,7 @@ export default class ImportNavLink extends Component {
     } = event;
     const reader = new FileReader();
 
-    reader.onloadend = loaded => {
+    reader.onloadend = (loaded) => {
       const {
         target: { result }
       } = loaded;

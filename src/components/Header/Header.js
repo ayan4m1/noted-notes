@@ -47,7 +47,7 @@ export class Header extends Component {
   }
 }
 
-export const mapDispatchToProps = dispatch => ({
+export const mapDispatchToProps = (dispatch) => ({
   actions: bindActionCreators(applicationActions, dispatch)
 });
 

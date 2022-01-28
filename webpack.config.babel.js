@@ -1,4 +1,3 @@
-import webpack from 'webpack';
 import { resolve } from 'path';
 import { CLIEngine } from 'eslint';
 import HtmlPlugin from 'html-webpack-plugin';
@@ -6,7 +5,7 @@ import TerserPlugin from 'terser-webpack-plugin';
 import StylelintPlugin from 'stylelint-webpack-plugin';
 import MiniCSSExtractPlugin from 'mini-css-extract-plugin';
 import { CleanWebpackPlugin as CleanPlugin } from 'clean-webpack-plugin';
-import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
+import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 
 const dev = process.env.NODE_ENV === 'development';
 
@@ -18,7 +17,7 @@ const plugins = [
     files: '**/*.scss',
     failOnError: true,
     quiet: false,
-    syntax: 'scss'
+    customSyntax: 'postcss-scss'
   }),
   new MiniCSSExtractPlugin({
     filename: '[name].css'
@@ -28,20 +27,13 @@ const plugins = [
   })
 ];
 
-if (dev) {
-  plugins.push(new webpack.HotModuleReplacementPlugin());
-}
-
 export default {
   mode: dev ? 'development' : 'production',
-  devtool: dev ? 'cheap-module-eval-source-map' : 'cheap-module-source-map',
+  devtool: dev ? 'eval-cheap-module-source-map' : 'cheap-module-source-map',
   entry: './src/index.js',
   devServer: {
-    compress: dev,
     open: true,
-    overlay: true,
     historyApiFallback: true,
-    hot: dev,
     port: 9000
   },
   module: {
@@ -66,14 +58,7 @@ export default {
           'css-loader',
           {
             loader: 'postcss-loader',
-            options: {
-              ident: 'postcss',
-              plugins: [
-                require('autoprefixer'),
-                require('postcss-flexbugs-fixes')
-              ],
-              sourceMap: dev
-            }
+            options: { sourceMap: dev }
           },
           'sass-loader'
         ]
@@ -91,7 +76,7 @@ export default {
   },
   output: {
     path: resolve(__dirname, 'dist'),
-    filename: 'main.js',
+    filename: '[name].js',
     chunkFilename: '[name].js'
   },
   plugins,
@@ -113,7 +98,7 @@ export default {
           ecma: 9
         }
       }),
-      new OptimizeCSSAssetsPlugin({})
+      new CssMinimizerPlugin()
     ],
     splitChunks: {
       cacheGroups: {
