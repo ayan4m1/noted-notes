@@ -1,16 +1,13 @@
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
-import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { applyMiddleware, createStore, compose } from 'redux';
 
 import './icons';
 import './index.scss';
-// eslint-disable-next-line
 import App from './components/App/App';
 import rootSaga from './sagas';
 import rootReducer from './reducers';
@@ -33,11 +30,9 @@ if (module.hot) {
 sagaMiddleware.run(rootSaga);
 
 ReactDOM.render(
-  <Router>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </Router>,
+  <Provider store={store}>
+    <App />
+  </Provider>,
   document.getElementById('root')
 );
 

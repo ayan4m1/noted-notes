@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { Nav } from 'react-bootstrap';
-import React, { Component, Fragment } from 'react';
+import { createRef, Component, Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default class ImportNavLink extends Component {
@@ -11,7 +11,7 @@ export default class ImportNavLink extends Component {
   constructor(props) {
     super(props);
 
-    this.importRef = React.createRef();
+    this.importRef = createRef();
     this.handleImportClick = this.handleImportClick.bind(this);
     this.handleImportChange = this.handleImportChange.bind(this);
   }

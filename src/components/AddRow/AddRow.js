@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-unresolved
 import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

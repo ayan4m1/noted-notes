@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Table } from 'react-bootstrap';
-import React, { Component } from 'react';
+import { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import {
   SortableContainer as sortableContainer,
@@ -33,7 +33,7 @@ const SortableTableBody = sortableContainer(
   )
 );
 
-export class NoteTable extends Component {
+class NoteTable extends Component {
   static propTypes = {
     actions: PropTypes.shape({
       rowAdd: PropTypes.func.isRequired,
@@ -68,8 +68,8 @@ export class NoteTable extends Component {
       <Table className="nn-note-table">
         <thead>
           <tr>
-            <th>Order</th>
-            <th>Action</th>
+            <th className="text-end">Order</th>
+            <th className="text-center">Action</th>
             <th>Flavor name</th>
             <th>Notes</th>
           </tr>

@@ -1,16 +1,14 @@
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import React, { Component, Fragment } from 'react';
+import { Component, Fragment } from 'react';
 
-// eslint-disable-next-line
 import Header from 'components/Header/Header';
-// eslint-disable-next-line
 import NoteTable from 'components/NoteTable/NoteTable';
 
 import { actions as applicationActions } from 'reducers/application';
 
-export class App extends Component {
+class App extends Component {
   static propTypes = {
     actions: PropTypes.shape({
       appInit: PropTypes.func.isRequired

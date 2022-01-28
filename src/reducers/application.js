@@ -1,5 +1,5 @@
 import { buildActions } from 'utils';
-import arrayMove from 'array-move';
+import { arrayMoveImmutable } from 'array-move';
 
 export const types = buildActions('application', [
   'APP_INIT',
@@ -104,7 +104,7 @@ export const reducer = (state = initialState, action = {}) => {
     case types.ROW_REORDER:
       return {
         ...state,
-        data: arrayMove(state.data, action.oldIndex, action.newIndex)
+        data: arrayMoveImmutable(state.data, action.oldIndex, action.newIndex)
       };
     case types.ROW_UPDATE:
       return {
