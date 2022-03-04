@@ -6,8 +6,7 @@
   "license": "MIT",
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
-    "start": "cross-env NODE_ENV=development webpack serve",
-    "deploy": "gh-pages -d dist/"
+    "start": "cross-env NODE_ENV=development webpack serve"
   },
   "dependencies": {
     "@babel/runtime": "^7.17.2",
@@ -55,7 +54,6 @@
     "eslint-plugin-react": "^7.29.3",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-webpack-plugin": "^3.1.1",
-    "gh-pages": "^3.2.3",
     "html-loader": "^3.1.0",
     "html-webpack-plugin": "^5.5.0",
     "husky": "^7.0.4",
