@@ -1,6 +1,6 @@
 import { resolve } from 'path';
-import { CLIEngine } from 'eslint';
 import HtmlPlugin from 'html-webpack-plugin';
+import ESLintPlugin from 'eslint-webpack-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
 import StylelintPlugin from 'stylelint-webpack-plugin';
 import MiniCSSExtractPlugin from 'mini-css-extract-plugin';
@@ -24,7 +24,8 @@ const plugins = [
   }),
   new HtmlPlugin({
     template: './src/index.html'
-  })
+  }),
+  new ESLintPlugin()
 ];
 
 export default {
@@ -41,15 +42,7 @@ export default {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: [
-          'babel-loader',
-          {
-            loader: 'eslint-loader',
-            options: {
-              formatter: CLIEngine.getFormatter('stylish')
-            }
-          }
-        ]
+        use: ['babel-loader']
       },
       {
         test: /\.(sa|sc|c)ss$/,
@@ -95,7 +88,7 @@ export default {
     minimizer: [
       new TerserPlugin({
         terserOptions: {
-          ecma: 9
+          ecma: 12
         }
       }),
       new CssMinimizerPlugin()
