@@ -1,7 +1,4 @@
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
-
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
 import createSagaMiddleware from 'redux-saga';
 import { applyMiddleware, createStore, compose } from 'redux';
@@ -29,11 +26,10 @@ if (module.hot) {
 
 sagaMiddleware.run(rootSaga);
 
-ReactDOM.render(
+const root = createRoot(document.getElementById('root'));
+
+root.render(
   <Provider store={store}>
     <App />
-  </Provider>,
-  document.getElementById('root')
+  </Provider>
 );
-
-export default App;
